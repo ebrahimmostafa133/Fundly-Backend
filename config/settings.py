@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_filters',
 
@@ -75,8 +76,13 @@ DATABASES = {
     }
 }
 
-# Custom user model (we'll create this in Step 2)
-# AUTH_USER_MODEL = 'accounts.CustomUser'
+# Custom user model
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Email-based authentication backend
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 # DRF settings
 REST_FRAMEWORK = {
@@ -109,6 +115,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Vite default port
     'http://localhost:3000',
 ]
+
+# Frontend URL (used for activation & reset links in emails)
+FRONTEND_URL = 'http://localhost:5173'
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
