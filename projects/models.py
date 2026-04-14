@@ -91,7 +91,7 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-
+"""
 class Rating(models.Model):
     project = models.ForeignKey(
         Project,
@@ -115,3 +115,4 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'Rating {self.score} by {self.user_id} on project {self.project_id}'
+"""

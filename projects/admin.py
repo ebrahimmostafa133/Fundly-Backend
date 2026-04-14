@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Project, Rating, Tag
+from .models import Category, Project, Tag
 
 
 @admin.register(Category)
@@ -16,13 +16,13 @@ class TagAdmin(admin.ModelAdmin):
     readonly_fields = ['slug']
     search_fields = ['name']
 
-
+""""
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
     list_display = ['project', 'user', 'score', 'created_at']
     list_filter = ['score', 'created_at']
     search_fields = ['project__title', 'user__username']
-
+"""
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):

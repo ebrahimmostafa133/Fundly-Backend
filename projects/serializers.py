@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import Category, Project, Rating, Tag
+from .models import Category, Project, Tag
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -120,7 +120,7 @@ class ProjectWriteSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Progress must be between 0 and 100.')
         return value
 
-
+"""
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
@@ -130,3 +130,4 @@ class RatingSerializer(serializers.ModelSerializer):
         if value < 1 or value > 5:
             raise serializers.ValidationError('Score must be between 1 and 5.')
         return value
+"""
