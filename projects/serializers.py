@@ -34,6 +34,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     images = ProjectImageSerializer(many=True, read_only=True)
     owner = serializers.CharField(source='owner.email', read_only=True)
+    progress = serializers.SerializerMethodField()
     avg_rating = serializers.SerializerMethodField()
 
     class Meta:
@@ -67,12 +68,16 @@ class ProjectListSerializer(serializers.ModelSerializer):
             return float(project.avg)
         return project.avg_rating
 
+    def get_progress(self, project):
+        return project.progress
+
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     images = ProjectImageSerializer(many=True, read_only=True)
     owner = OwnerSerializer(read_only=True)
+    progress = serializers.SerializerMethodField()
     avg_rating = serializers.SerializerMethodField()
 
     class Meta:
@@ -106,6 +111,9 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
                 return None
             return float(project.avg)
         return project.avg_rating
+
+    def get_progress(self, project):
+        return project.progress
 
 
 class ProjectWriteSerializer(serializers.ModelSerializer):

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Avg, Sum
 from django.utils.text import slugify
@@ -77,10 +77,6 @@ class Project(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
-    progress = models.PositiveSmallIntegerField(
-        default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
-    )
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -88,19 +84,13 @@ class Project(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def calculate_progress(self):
+    @property
+    def progress(self):
         total_donations = self.donations.aggregate(total=Sum('amount'))['total'] or 0
         if self.target <= 0:
             return 0
         progress = int((total_donations / self.target) * 100)
         return min(progress, 100)
-
-    def refresh_progress(self):
-        progress = self.calculate_progress()
-        if self.progress != progress:
-            self.progress = progress
-            self.save(update_fields=['progress', 'updated_at'])
-        return self.progress
 
     @property
     def avg_rating(self):

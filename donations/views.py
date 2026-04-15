@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -8,9 +9,9 @@ from projects.models import Project
 
 # ─── calculate progress ─────────────────────────────────────────────────────────
 def calculate_progress(project):
-    total = sum([d.amount for d in project.donations.all()])
+    total = project.donations.aggregate(total=Sum('amount'))['total'] or 0
     target = project.target
-    progress = project.refresh_progress()
+    progress = project.progress
     return {
         "total_donations": float(total),
         "target": float(target),

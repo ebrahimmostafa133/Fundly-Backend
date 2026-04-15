@@ -20,14 +20,5 @@ class Donation(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.project.refresh_progress()
-
-    def delete(self, *args, **kwargs):
-        project = self.project
-        super().delete(*args, **kwargs)
-        project.refresh_progress()
-
     def __str__(self):
         return f"{self.user} donated {self.amount} to {self.project}"
