@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_str
@@ -9,8 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-
-logger = logging.getLogger(__name__)
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .permissions import is_admin_user
 from .serializers import (
@@ -45,8 +43,9 @@ def register(request):
     # Send activation email
     try:
         send_activation_email(user, request)
-    except Exception as exc:
-        logger.exception('Activation email failed for user %s', user.email)
+    except Exception:
+        # Log the error in production; don't block registration
+        pass
 
     return Response(
         {
@@ -184,6 +183,7 @@ def logout(request):
 
 @api_view(["GET", "PATCH"])
 @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
 def profile(request):
     """
     GET   /api/auth/profile/  — get own profile
