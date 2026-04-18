@@ -1,33 +1,31 @@
-
 <div align="center">
+
 # 🚀 Fundly — Backend API
 
 **A powerful, production-ready crowdfunding REST API built with Django & Django REST Framework**
 
-[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
-[![Django](https://img.shields.io/badge/Django-6.0-092E20?style=for-the-badge&logo=django&logoColor=white)](https://djangoproject.com/)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Django](https://img.shields.io/badge/Django-6.0-092E20?style=for-the-badge&logo=django&logoColor=white)](https://djangoproject.com)
 [![DRF](https://img.shields.io/badge/DRF-3.17-red?style=for-the-badge&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io)
 
 </div>
----
-
 
 ---
 
 ## 📋 Table of Contents
 
-* [Overview](#-overview)
-* [Features](#-features)
-* [Tech Stack](#-tech-stack)
-* [Project Structure](#-project-structure)
-* [Getting Started](#-getting-started)
-* [Environment Variables](#-environment-variables)
-* [API Reference](#-api-reference)
-* [Authentication Flow](#-authentication-flow)
-* [Data Models](#-data-models)
-* [Deployment](#-deployment)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Environment Variables](#-environment-variables)
+- [API Reference](#-api-reference)
+- [Authentication Flow](#-authentication-flow)
+- [Data Models](#-data-models)
+- [Deployment](#-deployment)
 
 ---
 
@@ -39,33 +37,33 @@
 
 ## ✨ Features
 
-| Feature                     | Description                                                                 |
-| --------------------------- | --------------------------------------------------------------------------- |
-| 🔐**Auth & Security** | JWT access/refresh tokens, token blacklisting, email verification           |
-| 👤**User Management** | Custom user model with email-based auth, profile management, password reset |
-| 📁**Projects**        | Full CRUD, categories, tags, image uploads, featured & top-rated listings   |
-| 💰**Donations**       | Per-project donations with live progress tracking                           |
-| 💬**Comments**        | Nested comments (1-level deep replies) with author info                     |
-| ⭐**Ratings**         | 1–5 star project ratings with average aggregation                          |
-| 🚩**Reports**         | Flag projects or comments for spam/inappropriate content                    |
-| 🔍**Search & Filter** | Full-text search, category/tag filtering, ordering                          |
-| 📧**Email**           | Transactional emails via SendGrid (activation & password reset)             |
-| ☁️**Media**         | Local filesystem or Cloudinary (toggle via env var)                         |
-| 🌐**CORS**            | Configured for React/Vite frontends                                         |
+| Feature | Description |
+|---|---|
+| 🔐 **Auth & Security** | JWT access/refresh tokens, token blacklisting, email verification |
+| 👤 **User Management** | Custom user model with email-based auth, profile management, password reset |
+| 📁 **Projects** | Full CRUD, categories, tags, image uploads, featured & top-rated listings |
+| 💰 **Donations** | Per-project donations with live progress tracking |
+| 💬 **Comments** | Nested comments (1-level deep replies) with author info |
+| ⭐ **Ratings** | 1–5 star project ratings with average aggregation |
+| 🚩 **Reports** | Flag projects or comments for spam/inappropriate content |
+| 🔍 **Search & Filter** | Full-text search, category/tag filtering, ordering |
+| 📧 **Email** | Transactional emails via SendGrid (activation & password reset) |
+| ☁️ **Media** | Local filesystem or Cloudinary (toggle via env var) |
+| 🌐 **CORS** | Configured for React/Vite frontends |
 
 ---
 
 ## 🛠 Tech Stack
 
-* **Framework:** Django 6.0 + Django REST Framework 3.17
-* **Database:** PostgreSQL (via `psycopg2-binary`)
-* **Auth:** `djangorestframework-simplejwt` with token blacklisting
-* **Email:** `django-anymail` + SendGrid
-* **Media:** Pillow + optional `django-cloudinary-storage`
-* **Static Files:** WhiteNoise
-* **Filtering:** `django-filter`
-* **Config:** `python-decouple`
-* **Deployment:** Gunicorn + Render-ready
+- **Framework:** Django 6.0 + Django REST Framework 3.17
+- **Database:** PostgreSQL (via `psycopg2-binary`)
+- **Auth:** `djangorestframework-simplejwt` with token blacklisting
+- **Email:** `django-anymail` + SendGrid
+- **Media:** Pillow + optional `django-cloudinary-storage`
+- **Static Files:** WhiteNoise
+- **Filtering:** `django-filter`
+- **Config:** `python-decouple`
+- **Deployment:** Gunicorn + Render-ready
 
 ---
 
@@ -124,10 +122,10 @@ Fundly-Backend/
 
 ### Prerequisites
 
-* Python 3.12+
-* PostgreSQL 14+
-* (Optional) A [Cloudinary](https://cloudinary.com/) account for media hosting
-* (Optional) A [SendGrid](https://sendgrid.com/) API key for emails
+- Python 3.12+
+- PostgreSQL 14+
+- (Optional) A [Cloudinary](https://cloudinary.com) account for media hosting
+- (Optional) A [SendGrid](https://sendgrid.com) API key for emails
 
 ### 1. Clone the Repository
 
@@ -181,7 +179,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-The API will be available at  **`http://localhost:8000`** .
+The API will be available at **`http://localhost:8000`**.
 
 ---
 
@@ -223,36 +221,36 @@ Base URL: `/api/`
 
 ### 🔐 Authentication — `/api/auth/`
 
-| Method        | Endpoint                                        | Auth     | Description                      |
-| ------------- | ----------------------------------------------- | -------- | -------------------------------- |
-| `POST`      | `/auth/register/`                             | ❌       | Register a new user              |
-| `GET`       | `/auth/activate/<uid>/<token>/`               | ❌       | Verify email address             |
-| `POST`      | `/auth/login/`                                | ❌       | Login & receive JWT tokens       |
-| `POST`      | `/auth/logout/`                               | ✅       | Logout & blacklist refresh token |
-| `POST`      | `/auth/token/refresh/`                        | ❌       | Refresh access token             |
-| `GET/PATCH` | `/auth/profile/`                              | ✅       | View or update profile           |
-| `DELETE`    | `/auth/profile/delete/`                       | ✅       | Delete account                   |
-| `POST`      | `/auth/password/change/`                      | ✅       | Change password                  |
-| `POST`      | `/auth/password/reset/`                       | ❌       | Request password reset email     |
-| `POST`      | `/auth/password/reset/confirm/<uid>/<token>/` | ❌       | Set new password                 |
-| `GET`       | `/auth/users/`                                | 🔑 Admin | List all users                   |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/auth/register/` | ❌ | Register a new user |
+| `GET` | `/auth/activate/<uid>/<token>/` | ❌ | Verify email address |
+| `POST` | `/auth/login/` | ❌ | Login & receive JWT tokens |
+| `POST` | `/auth/logout/` | ✅ | Logout & blacklist refresh token |
+| `POST` | `/auth/token/refresh/` | ❌ | Refresh access token |
+| `GET/PATCH` | `/auth/profile/` | ✅ | View or update profile |
+| `DELETE` | `/auth/profile/delete/` | ✅ | Delete account |
+| `POST` | `/auth/password/change/` | ✅ | Change password |
+| `POST` | `/auth/password/reset/` | ❌ | Request password reset email |
+| `POST` | `/auth/password/reset/confirm/<uid>/<token>/` | ❌ | Set new password |
+| `GET` | `/auth/users/` | 🔑 Admin | List all users |
 
 ### 📁 Projects — `/api/projects/`
 
-| Method        | Endpoint                    | Auth     | Description                                  |
-| ------------- | --------------------------- | -------- | -------------------------------------------- |
-| `GET`       | `/projects/`              | ❌       | List all projects (filter, search, paginate) |
-| `POST`      | `/projects/`              | ✅       | Create a new project                         |
-| `GET`       | `/projects/<id>/`         | ❌       | Retrieve project details                     |
-| `PUT/PATCH` | `/projects/<id>/`         | ✅ Owner | Update project                               |
-| `POST`      | `/projects/<id>/cancel/`  | ✅ Owner | Cancel project (if progress < 25%)           |
-| `GET`       | `/projects/<id>/similar/` | ❌       | Get similar projects by tags                 |
-| `GET`       | `/projects/featured/`     | ❌       | List featured projects                       |
-| `GET`       | `/projects/top-rated/`    | ❌       | List top-rated active projects               |
-| `GET`       | `/projects/categories/`   | ❌       | List all categories                          |
-| `POST`      | `/projects/categories/`   | 🔑 Admin | Create a category                            |
-| `GET`       | `/projects/tags/`         | ❌       | List all tags                                |
-| `POST`      | `/projects/tags/`         | 🔑 Admin | Create a tag                                 |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/projects/` | ❌ | List all projects (filter, search, paginate) |
+| `POST` | `/projects/` | ✅ | Create a new project |
+| `GET` | `/projects/<id>/` | ❌ | Retrieve project details |
+| `PUT/PATCH` | `/projects/<id>/` | ✅ Owner | Update project |
+| `POST` | `/projects/<id>/cancel/` | ✅ Owner | Cancel project (if progress < 25%) |
+| `GET` | `/projects/<id>/similar/` | ❌ | Get similar projects by tags |
+| `GET` | `/projects/featured/` | ❌ | List featured projects |
+| `GET` | `/projects/top-rated/` | ❌ | List top-rated active projects |
+| `GET` | `/projects/categories/` | ❌ | List all categories |
+| `POST` | `/projects/categories/` | 🔑 Admin | Create a category |
+| `GET` | `/projects/tags/` | ❌ | List all tags |
+| `POST` | `/projects/tags/` | 🔑 Admin | Create a tag |
 
 **Query Parameters for `GET /projects/`:**
 
@@ -265,35 +263,35 @@ Base URL: `/api/`
 
 ### 💰 Donations — `/api/donations/`
 
-| Method   | Endpoint                             | Auth | Description                         |
-| -------- | ------------------------------------ | ---- | ----------------------------------- |
-| `POST` | `/donations/donate/<project_id>/`  | ✅   | Make a donation                     |
-| `GET`  | `/donations/project/<project_id>/` | ❌   | Get project donation details        |
-| `GET`  | `/donations/my-donations/`         | ✅   | Get current user's donation history |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/donations/donate/<project_id>/` | ✅ | Make a donation |
+| `GET` | `/donations/project/<project_id>/` | ❌ | Get project donation details |
+| `GET` | `/donations/my-donations/` | ✅ | Get current user's donation history |
 
 ### 💬 Comments — `/api/comments/`
 
-| Method     | Endpoint                            | Auth     | Description                 |
-| ---------- | ----------------------------------- | -------- | --------------------------- |
-| `GET`    | `/comments/project/<project_id>/` | ❌       | List comments for a project |
-| `POST`   | `/comments/project/<project_id>/` | ✅       | Post a comment              |
-| `POST`   | `/comments/<comment_id>/reply/`   | ✅       | Reply to a comment          |
-| `PATCH`  | `/comments/<comment_id>/`         | ✅ Owner | Edit a comment              |
-| `DELETE` | `/comments/<comment_id>/`         | ✅ Owner | Delete a comment            |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `GET` | `/comments/project/<project_id>/` | ❌ | List comments for a project |
+| `POST` | `/comments/project/<project_id>/` | ✅ | Post a comment |
+| `POST` | `/comments/<comment_id>/reply/` | ✅ | Reply to a comment |
+| `PATCH` | `/comments/<comment_id>/` | ✅ Owner | Edit a comment |
+| `DELETE` | `/comments/<comment_id>/` | ✅ Owner | Delete a comment |
 
 ### ⭐ Ratings — `/api/ratings/`
 
-| Method   | Endpoint                           | Auth | Description                    |
-| -------- | ---------------------------------- | ---- | ------------------------------ |
-| `POST` | `/ratings/create/`               | ✅   | Rate a project (1–5 stars)    |
-| `GET`  | `/ratings/project/<project_id>/` | ❌   | Get rating stats for a project |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/ratings/create/` | ✅ | Rate a project (1–5 stars) |
+| `GET` | `/ratings/project/<project_id>/` | ❌ | Get rating stats for a project |
 
 ### 🚩 Reports — `/api/reports/`
 
-| Method   | Endpoint              | Auth | Description                          |
-| -------- | --------------------- | ---- | ------------------------------------ |
-| `POST` | `/reports/create/`  | ✅   | Report a project or comment          |
-| `GET`  | `/reports/reasons/` | ❌   | List available report reason choices |
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| `POST` | `/reports/create/` | ✅ | Report a project or comment |
+| `GET` | `/reports/reasons/` | ❌ | List available report reason choices |
 
 ---
 
@@ -314,7 +312,6 @@ Base URL: `/api/`
 ## 🗄 Data Models
 
 ### CustomUser
-
 ```
 email (unique, indexed) | first_name | last_name | phone
 profile_picture | date_of_birth | country | bio
@@ -322,7 +319,6 @@ is_email_verified | created_at | updated_at
 ```
 
 ### Project
-
 ```
 owner (FK→User) | title | description | target (decimal)
 category (FK→Category) | tags (M2M→Tag) | start_time | end_time
@@ -331,27 +327,23 @@ status [active|cancelled|completed] | is_featured
 ```
 
 ### Donation
-
 ```
 user (FK→User) | project (FK→Project) | amount | created_at
 ```
 
 ### Comment
-
 ```
 project (FK→Project) | user (FK→User) | parent (FK→self, nullable)
 content | created_at | updated_at
 ```
 
 ### Rating
-
 ```
 user (FK→User) | project (FK→Project) | value (1–5)
 unique_together: (user, project)
 ```
 
 ### Report
-
 ```
 user (FK→User) | project (FK→Project, nullable) | comment (FK→Comment, nullable)
 reason [spam|inappropriate|offensive|other] | created_at
@@ -361,7 +353,7 @@ reason [spam|inappropriate|offensive|other] | created_at
 
 ## ☁️ Deployment
 
-This project is configured for deployment on  **[Render](https://render.com/)** .
+This project is configured for deployment on **[Render](https://render.com)**.
 
 ### Steps
 
@@ -379,13 +371,13 @@ This project is configured for deployment on  **[Render](https://render.com/)** 
 
 ### Production Checklist
 
-* [ ] `DEBUG=False`
-* [ ] `SECRET_KEY` is long, random, and secret
-* [ ] `ALLOWED_HOSTS` includes your Render domain
-* [ ] PostgreSQL add-on configured in Render
-* [ ] `USE_CLOUDINARY=True` with valid credentials (recommended for media)
-* [ ] `SENDGRID_API_KEY` set for transactional emails
-* [ ] `FRONTEND_URL_DEPLOY` points to your deployed frontend
+- [ ] `DEBUG=False`
+- [ ] `SECRET_KEY` is long, random, and secret
+- [ ] `ALLOWED_HOSTS` includes your Render domain
+- [ ] PostgreSQL add-on configured in Render
+- [ ] `USE_CLOUDINARY=True` with valid credentials (recommended for media)
+- [ ] `SENDGRID_API_KEY` set for transactional emails
+- [ ] `FRONTEND_URL_DEPLOY` points to your deployed frontend
 
 ---
 
@@ -401,7 +393,24 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ---
 
+## 👥 Team
+
 <div align="center">
+
+| Avatar | Name | GitHub |
+|--------|------|--------|
+| <img src="https://github.com/ebrahimmostafa133.png" width="50" height="50" style="border-radius:50%"> | **Ebrahim Mostafa** | [@ebrahimmostafa133](https://github.com/ebrahimmostafa133) |
+| <img src="https://github.com/Mostafa-Khalifaa.png" width="50" height="50" style="border-radius:50%"> | **Mostafa Khalifa** | [@Mostafa-Khalifaa](https://github.com/Mostafa-Khalifaa) |
+| <img src="https://github.com/Shahd3711.png" width="50" height="50" style="border-radius:50%"> | **Shahd** | [@Shahd3711](https://github.com/Shahd3711) |
+| <img src="https://github.com/Khaleddd11.png" width="50" height="50" style="border-radius:50%"> | **Khaled** | [@Khaleddd11](https://github.com/Khaleddd11) |
+| <img src="https://github.com/ahmed-ehab-reffat.png" width="50" height="50" style="border-radius:50%"> | **Ahmed Ehab** | [@ahmed-ehab-reffat](https://github.com/ahmed-ehab-reffat) |
+
+</div>
+
+---
+
+<div align="center">
+
 Made with ❤️ by the Fundly Team
 
 </div>
