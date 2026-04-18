@@ -29,11 +29,14 @@ class ProjectListCreateView(APIView):
         category_slug = request.query_params.get('category')
         tag_slug = request.query_params.get('tag')
         search_text = request.query_params.get('search')
+        owner_id = request.query_params.get('owner')
 
         if category_slug:
             projects = projects.filter(category__slug__iexact=category_slug)
         if tag_slug:
             projects = projects.filter(tags__slug__iexact=tag_slug).distinct()
+        if owner_id:
+            projects = projects.filter(owner_id=owner_id)
         if search_text:
             projects = projects.filter(
                 Q(title__icontains=search_text)
