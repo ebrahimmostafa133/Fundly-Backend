@@ -125,10 +125,12 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Vite default port
     'http://localhost:3000',
+    'https://fundly-frontend.vercel.app/',
 ]
 
 # Frontend URL (used for activation & reset links in emails)
-FRONTEND_URL = 'http://localhost:5173'
+FRONTEND_URL = config('FRONTEND_URL_DEPLOY', default='http://localhost:5173'),
+
 
 # Email — SendGrid via AnyMail
 EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
