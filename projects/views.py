@@ -36,8 +36,11 @@ class ProjectListCreateView(APIView):
             projects = projects.filter(tags__slug__iexact=tag_slug).distinct()
         if search_text:
             projects = projects.filter(
-                Q(title__icontains=search_text) | Q(description__icontains=search_text)
-            )
+                Q(title__icontains=search_text)
+                | Q(description__icontains=search_text)
+                | Q(tags__name__icontains=search_text)
+                | Q(tags__slug__icontains=search_text)
+            ).distinct()
 
         serializer = ProjectListSerializer(projects, many=True)
         return Response(serializer.data)
@@ -196,6 +199,7 @@ class TopRatedProjectsView(APIView):
         projects = projects.select_related('owner', 'category')
         projects = projects.prefetch_related('tags', 'images')
         projects = projects.annotate(avg=Avg('ratings__value'))
+        projects = projects.filter(status='active')
         # Put projects with no rating at the end
         projects = projects.order_by(F('avg').desc(nulls_last=True), '-created_at')
         projects = projects[:5]
