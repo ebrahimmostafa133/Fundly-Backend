@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from .models import Category, Project, ProjectImage, Tag
 
@@ -49,6 +50,13 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(ProjectImage)
 class ProjectImageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'project', 'created_at']
+    list_display = ['id', 'project', 'image_url', 'created_at']
     list_filter = ['created_at']
     search_fields = ['project__title']
+    readonly_fields = ['image_url']
+
+    @admin.display(description='Image URL')
+    def image_url(self, obj):
+        if not obj.image:
+            return '-'
+        return format_html('<a href="{}" target="_blank">{}</a>', obj.image.url, obj.image.url)
