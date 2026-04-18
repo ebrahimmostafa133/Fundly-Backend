@@ -125,7 +125,7 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Vite default port
     'http://localhost:3000',
-    'https://fundly-frontend.vercel.app/',
+    'https://fundly-frontend.vercel.app',
 ]
 
 # Frontend URL (used for activation & reset links in emails)
