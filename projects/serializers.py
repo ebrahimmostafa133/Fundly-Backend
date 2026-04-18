@@ -19,7 +19,7 @@ class TagSerializer(serializers.ModelSerializer):
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email']
+        fields = ['id', 'email', 'first_name', 'last_name']
 
 
 class ProjectImageSerializer(serializers.ModelSerializer):
