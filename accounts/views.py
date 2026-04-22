@@ -9,6 +9,10 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
+from django.conf import settings
+from decouple import config
 
 from .permissions import is_admin_user
 from .serializers import (
@@ -144,6 +148,70 @@ def login(request):
         },
         status=status.HTTP_200_OK,
     )
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def google_login(request):
+    """
+    POST /api/auth/google-login/
+    Verify Google OAuth2 token and return JWT tokens.
+    """
+    token = request.data.get("token")
+    if not token:
+        return Response(
+            {"error": "Token is required"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+        # Verify the token with Google
+        idinfo = id_token.verify_oauth2_token(
+            token, google_requests.Request(), config("GOOGLE_CLIENT_ID")
+        )
+
+        email = idinfo["email"]
+        first_name = idinfo.get("given_name", "")
+        last_name = idinfo.get("family_name", "")
+
+        # Get or create user
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                "first_name": first_name,
+                "last_name": last_name,
+                "is_email_verified": True,
+            },
+        )
+
+        if not user.is_active:
+            return Response(
+                {"error": "This account has been deactivated."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        # Ensure email is verified if user already existed
+        if not user.is_email_verified:
+            user.is_email_verified = True
+            user.save(update_fields=["is_email_verified"])
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "message": "Login successful.",
+                "tokens": {
+                    "access": str(refresh.access_token),
+                    "refresh": str(refresh),
+                },
+                "user": ProfileSerializer(user).data,
+            },
+            status=status.HTTP_200_OK,
+        )
+
+    except ValueError:
+        return Response(
+            {"error": "Invalid Google token."}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 # ─── Logout ──────────────────────────────────────────────────────────────────

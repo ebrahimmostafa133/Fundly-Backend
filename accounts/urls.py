@@ -15,6 +15,7 @@ urlpatterns = [
     ),
     # Login / Logout / Token Refresh
     path("login/", views.login, name="login"),
+    path("google-login/", views.google_login, name="google-login"),
     path("logout/", views.logout, name="logout"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     # Profile

@@ -12,7 +12,8 @@ class DonationSerializer(serializers.ModelSerializer):
 # ─── user history ─────────────────────────────────────────────────────────
 class UserDonationSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source="project.title")
+    project_id = serializers.IntegerField(source="project.id")
 
     class Meta:
         model = Donation
-        fields = ["id", "project_title", "amount", "created_at"]
+        fields = ["id", "project_title", "project_id", "amount", "created_at"]
