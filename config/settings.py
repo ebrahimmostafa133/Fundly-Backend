@@ -82,16 +82,37 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
+USE_RDS = config('USE_RDS', default=False, cast=bool)
+
+if USE_RDS:
+    # AWS RDS PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('RDS_DB_NAME'),
+            'USER': config('RDS_DB_USER'),
+            'PASSWORD': config('RDS_DB_PASSWORD'),
+            'HOST': config('RDS_DB_HOST'),
+            'PORT': config('RDS_DB_PORT', default='5432'),
+            'CONN_MAX_AGE': 600,  # Connection pooling
+            'OPTIONS': {
+                'connect_timeout': 10,
+                'sslmode': 'require',
+            }
+        }
     }
-}
+else:
+    # Local PostgreSQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -138,12 +159,22 @@ CORS_ALLOWED_ORIGINS = [
 FRONTEND_URL = config('FRONTEND_URL_DEPLOY', default='http://localhost:5173')
 
 
-# Email — SendGrid via AnyMail
-EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
-ANYMAIL = {
-    'SENDGRID_API_KEY': config('SENDGRID_API_KEY')
-}
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='ibrahim.mostafa9939@gmail.com')
+# Email Configuration
+USE_SES = config('USE_SES', default=False, cast=bool)
+
+if USE_SES:
+    # AWS SES Email Backend
+    EMAIL_BACKEND = 'django_ses.SESBackend'
+    AWS_SES_REGION_NAME = config('AWS_SES_REGION_NAME', default='us-east-1')
+    AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+else:
+    # SendGrid via AnyMail (default)
+    EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
+    ANYMAIL = {
+        'SENDGRID_API_KEY': config('SENDGRID_API_KEY', default='')
+    }
+
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@fundly.com')
 
 # Media files (user uploads)
 MEDIA_URL = '/media/'
