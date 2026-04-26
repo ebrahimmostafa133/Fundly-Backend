@@ -7,19 +7,30 @@ ENV/
 # Python artifacts
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+*.pyc
 
 # Django sensitive files
 db.sqlite3
 .env
 
-# Media and Static
+# Media and Static (generated at runtime / served from S3)
 /static/
 /media/
+/staticfiles/
 
 # IDE files
 .vscode/
+.idea/
 
-# Elastic Beanstalk Files
+# Elastic Beanstalk — keep config.yml and .ebextensions, ignore generated files
 .elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+!.elasticbeanstalk/config.yml
+
+# EB debug logs (generated locally)
+eb_logs.txt
+eb_output.txt
+
+# SSL certificate (large binary, not needed in repo)
+global-bundle.pem
