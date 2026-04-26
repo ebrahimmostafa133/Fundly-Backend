@@ -1,32 +1,39 @@
-asgiref==3.11.1
-certifi==2026.2.25
-cffi==2.0.0
-charset-normalizer==3.4.7
-cloudinary==1.44.2
-cryptography==46.0.7
 Django==6.0.4
-django-anymail==10.2
-django-cloudinary-storage==0.3.0
+djangorestframework==3.17.1
+djangorestframework-simplejwt==5.5.1
 django-cors-headers==4.9.0
 django-filter==25.2
-djangorestframework==3.17.1
-djangorestframework_simplejwt==5.5.1
-google-auth==2.49.2
-gunicorn==25.3.0
-idna==3.11
-packaging==26.1
-pillow==12.2.0
-psycopg2-binary==2.9.11
-pyasn1==0.6.3
-pyasn1_modules==0.4.2
-pycparser==3.0
-PyJWT==2.12.1
-python-decouple==3.8
-requests==2.33.1
-six==1.17.0
-sqlparse==0.5.5
-urllib3==2.6.3
-whitenoise==6.12.0
-boto3==1.35.21
+django-anymail==10.2
+django-ses==4.4.0
 django-storages==1.14.4
-django-ses==3.0.2
+django-cloudinary-storage==0.3.0
+
+# Auth
+google-auth==2.35.0
+PyJWT==2.9.0
+
+# Database
+psycopg2-binary==2.9.10
+
+# AWS
+boto3==1.35.21
+
+# Image processing
+cloudinary==1.41.0
+pillow==11.1.0
+
+# Server
+gunicorn==23.0.0
+whitenoise==6.8.2
+
+# Utils
+python-decouple==3.8
+asgiref==3.8.1
+sqlparse==0.5.1
+requests==2.32.3
+certifi==2024.8.30
+charset-normalizer==3.4.0
+idna==3.10
+urllib3==2.2.3
+packaging==24.1
+six==1.16.0

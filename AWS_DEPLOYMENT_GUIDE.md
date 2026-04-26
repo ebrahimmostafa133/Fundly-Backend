@@ -1,10 +1,10 @@
-# AWS Backend Deployment Guide
+# AWS Elastic Beanstalk Deployment Guide
 
-This guide covers deploying your Fundly backend on AWS using multiple AWS services:
+This guide covers deploying your Fundly backend on **AWS Elastic Beanstalk** with:
 - **S3** for image storage (already configured ✓)
-- **RDS** for PostgreSQL database
-- **SES** for email sending
-- **EC2/ECS** for application hosting
+- **RDS** for PostgreSQL database (being created ✓)
+- **SES** for email sending (ready to configure)
+- **Elastic Beanstalk** for application hosting (this guide)
 
 ---
 
@@ -72,155 +72,73 @@ send_mail('Test', 'This is a test', 'noreply@fundly.com', ['your-email@example.c
 
 ---
 
-## 3. Deployment Options
+## 3. Deploy to Elastic Beanstalk
 
-### Option A: AWS Elastic Beanstalk (Easiest)
-
-**Prerequisites:**
+### Prerequisites
 ```bash
 pip install awsebcli
 ```
 
-**Initialize EB:**
+### Initialize Beanstalk
 ```bash
 eb init -p python-3.12 fundly-backend --region us-east-1
 ```
 
-**Create Environment:**
+Follow the prompts:
+- Choose region: `us-east-1`
+- Create new application key pair? **y** (or use existing)
+
+### Create Environment
+Wait for RDS to be ready, then create the Beanstalk environment:
+
 ```bash
-eb create fundly-production --scale 1 --envvars \
-  USE_RDS=True,\
-  RDS_DB_HOST=fundly-db.c9akciq32.us-east-1.rds.amazonaws.com,\
-  RDS_DB_NAME=postgres,\
-  RDS_DB_USER=fundly_admin,\
-  RDS_DB_PASSWORD=your-password,\
-  USE_AWS=True,\
-  AWS_STORAGE_BUCKET_NAME=your-bucket,\
-  USE_SES=True
+eb create fundly-production \
+  --scale 1 \
+  --instance-type t3.micro \
+  --envvars USE_RDS=True,RDS_DB_HOST=fundly-db.xxxxx.us-east-1.rds.amazonaws.com,RDS_DB_NAME=postgres,RDS_DB_USER=fundly_admin,RDS_DB_PASSWORD=Benzema_09,USE_AWS=True,AWS_STORAGE_BUCKET_NAME=demo-cloudfont-benzema-v5,AWS_S3_REGION_NAME=us-east-1,AWS_S3_CUSTOM_DOMAIN=d2qwfrld1oq4tr.cloudfront.net,USE_SES=True,DEFAULT_FROM_EMAIL=noreply@fundly.com,DEBUG=False
 ```
 
-**Deploy:**
+### Deploy
 ```bash
 eb deploy
 ```
 
----
-
-### Option B: Docker + ECS
-
-**Build Docker Image:**
+### Monitor Deployment
 ```bash
-docker build -t fundly-backend:latest .
+eb status
+eb logs --stream
 ```
 
-**Push to ECR:**
+### Access Your Application
 ```bash
-# Create ECR repository
-aws ecr create-repository --repository-name fundly-backend
-
-# Get login token
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
-
-# Tag and push
-docker tag fundly-backend:latest YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/fundly-backend:latest
-docker push YOUR_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/fundly-backend:latest
+eb open
 ```
-
-**Deploy to ECS:**
-1. Go to **ECS** → **Create Cluster**
-2. Choose **EC2 template** or **Fargate**
-3. Create task definition pointing to ECR image
-4. Create service with environment variables
 
 ---
 
-### Option C: EC2 Manual Deployment
+## 4. Elastic Beanstalk CLI Commands
 
-**Launch EC2 Instance:**
-1. **AMI**: Ubuntu 22.04 LTS
-2. **Instance Type**: `t3.micro` (free tier)
-3. **Security Group**: Allow ports 80, 443, 22
-
-**Connect and Setup:**
 ```bash
+# Check status
+eb status
+
+# View logs (live stream)
+eb logs --stream
+
 # SSH into instance
-ssh -i your-key.pem ubuntu@your-instance-ip
+eb ssh
 
-# Install dependencies
-sudo apt update && sudo apt install -y python3.12 python3.12-venv postgresql-client nginx
+# Open application in browser
+eb open
 
-# Clone repo
-git clone https://github.com/ebrahimmostafa133/Fundly-Backend.git
-cd Fundly-Backend
+# Update environment variables
+eb setenv USE_SES=True DEFAULT_FROM_EMAIL=noreply@fundly.com
 
-# Setup virtual environment
-python3.12 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+# Deploy new version
+eb deploy
 
-# Create .env with RDS and SES config
-nano .env
-
-# Run migrations
-python manage.py migrate
-python manage.py collectstatic --noinput
-
-# Start gunicorn
-gunicorn config.wsgi:application --bind 0.0.0.0:8000
-```
-
-**Configure Nginx (Reverse Proxy):**
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location /static/ {
-        alias /path/to/staticfiles/;
-    }
-
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
----
-
-## 4. Environment Variables Checklist
-
-```env
-# Django
-SECRET_KEY=your-secret
-DEBUG=False
-ALLOWED_HOSTS=your-domain.com,www.your-domain.com
-
-# RDS Database
-USE_RDS=True
-RDS_DB_HOST=your-rds-endpoint.rds.amazonaws.com
-RDS_DB_NAME=postgres
-RDS_DB_USER=fundly_admin
-RDS_DB_PASSWORD=your-password
-
-# AWS S3
-USE_AWS=True
-AWS_ACCESS_KEY_ID=your-key
-AWS_SECRET_ACCESS_KEY=your-secret
-AWS_STORAGE_BUCKET_NAME=your-bucket
-AWS_S3_REGION_NAME=us-east-1
-AWS_S3_CUSTOM_DOMAIN=your-cloudfront.cloudfront.net
-
-# AWS SES
-USE_SES=True
-DEFAULT_FROM_EMAIL=noreply@your-domain.com
-
-# Frontend
-FRONTEND_URL_DEPLOY=https://your-frontend.com
-
-# CORS
-CORS_ALLOWED_ORIGINS=https://your-frontend.com
+# Terminate environment
+eb terminate fundly-production
 ```
 
 ---

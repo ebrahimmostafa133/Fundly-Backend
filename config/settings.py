@@ -9,7 +9,7 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 USE_CLOUDINARY = config('USE_CLOUDINARY', default=False, cast=bool)
 USE_AWS = config('USE_AWS', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.onrender.com').split(',')
 
 # Applications
 INSTALLED_APPS = [
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django_filters',
     'anymail',
     'storages',
+    'django_ses',
 
     # Our apps (add these as we create them)
     'accounts',
@@ -98,6 +99,7 @@ if USE_RDS:
             'OPTIONS': {
                 'connect_timeout': 10,
                 'sslmode': 'require',
+                'sslrootcert': os.path.join(BASE_DIR, 'global-bundle.pem'),
             }
         }
     }
@@ -219,13 +221,14 @@ STORAGES = {
     },
 }
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 if not DEBUG:
     if USE_AWS:
         STORAGES['staticfiles'] = {
             'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
         }
     else:
-        STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
         STORAGES['staticfiles'] = {
             'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
         }
