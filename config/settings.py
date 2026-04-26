@@ -7,6 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 USE_CLOUDINARY = config('USE_CLOUDINARY', default=False, cast=bool)
+USE_AWS = config('USE_AWS', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'anymail',
+    'storages',
 
     # Our apps (add these as we create them)
     'accounts',
@@ -42,6 +44,10 @@ if USE_CLOUDINARY:
         'cloudinary',
         'cloudinary_storage',
     ]
+
+if USE_AWS:
+    # AWS is already added in base INSTALLED_APPS via 'storages'
+    pass
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  # must be first
@@ -146,6 +152,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Static files
 STATIC_URL = '/static/'
 default_file_storage_backend = 'django.core.files.storage.FileSystemStorage'
+
 if USE_CLOUDINARY:
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
@@ -153,6 +160,23 @@ if USE_CLOUDINARY:
         'API_SECRET': config('CLOUDINARY_API_SECRET'),
     }
     default_file_storage_backend = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+elif USE_AWS:
+    # AWS S3 Configuration
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME', default='us-east-1')
+    AWS_S3_CUSTOM_DOMAIN = config('AWS_S3_CUSTOM_DOMAIN', default=None)
+    AWS_LOCATION = config('AWS_LOCATION', default='media')
+    
+    # S3 static settings
+    STATIC_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{STATIC_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_LOCATION}/'
+    
+    # Use S3 for media storage
+    default_file_storage_backend = 'storages.backends.s3boto3.S3Boto3Storage'
 
 STORAGES = {
     'default': {
@@ -164,10 +188,15 @@ STORAGES = {
 }
 
 if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    STORAGES['staticfiles'] = {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    }
+    if USE_AWS:
+        STORAGES['staticfiles'] = {
+            'BACKEND': 'storages.backends.s3boto3.S3StaticStorage',
+        }
+    else:
+        STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+        STORAGES['staticfiles'] = {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
