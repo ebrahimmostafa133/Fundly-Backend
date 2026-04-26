@@ -172,8 +172,9 @@ elif USE_AWS:
     
     # S3 static settings
     STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{STATIC_LOCATION}/'
-    MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_LOCATION}/'
+    AWS_S3_DOMAIN = AWS_S3_CUSTOM_DOMAIN or f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com'
+    STATIC_URL = f'https://{AWS_S3_DOMAIN}/{STATIC_LOCATION}/'
+    MEDIA_URL = f'https://{AWS_S3_DOMAIN}/{AWS_LOCATION}/'
     
     # Use S3 for media storage
     default_file_storage_backend = 'storages.backends.s3boto3.S3Boto3Storage'
