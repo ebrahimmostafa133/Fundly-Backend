@@ -28,12 +28,9 @@ whitenoise==6.8.2
 
 # Utils
 python-decouple==3.8
-asgiref==3.8.1
-sqlparse==0.5.1
 requests==2.32.3
 certifi==2024.8.30
 charset-normalizer==3.4.0
 idna==3.10
 urllib3==2.2.3
-packaging==24.1
 six==1.16.0
